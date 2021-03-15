@@ -1,0 +1,8 @@
+# Project exclude paths
+/mall-api-common/target/
+/mall-consumer-login/target/
+/mall-consumer-order-8003/target/
+/mall-consumer-shoppingcart-8002/target/
+/mall-eureka-server-7000/target/
+/mall-eureka-server-7001/target/
+/mall-product-8000/target/

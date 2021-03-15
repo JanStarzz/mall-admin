@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.halley.mapper.OrdersMapper">
+    <resultMap id="orderShow" type="entity.OrderShow">
+        <id property="id" column="orderId"/>
+        <result property="cartId" column="cartId"/>
+        <result property="orderTime" column="orderTime" javaType="java.time.LocalDateTime"/>
+        <result property="ship" column="ship"/>
+        <result property="address" column="address"/>
+        <result property="phoneNum" column="phoneNum"/>
+        <result property="detail" column="detail" />
+        <collection property="orderItemsShows" ofType="entity.OrderItemsShow">
+            <id property="id" column="orderItemId"/>
+            <result property="count" column="count"/>
+            <association property="products" javaType="entity.Product">
+                <id property="productId" column="productId"/>
+                <result property="productName" column="productName"/>
+                <result property="productPicture" column="productPicture"/>
+                <result property="productPrice" column="productPrice"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="getOrderShow" resultMap="orderShow">
+        select
+            o.id as orderId,
+            o.cart_id as cartId,
+            o.order_time as orderTime,
+            o.ship as ship,
+            o.address as address,
+            o.phone_num as phoneNum,
+            o.detail as detail,
+            oi.id as orderItemId,
+            oi.count as count,
+            p.product_id as productId,
+            p.product_name as productName,
+            p.product_picture as productPicture,
+            p.product_price as productPrice
+        from orders o left join order_item oi on o.id = oi.order_id
+                     left join product p on oi.product_id = p.product_id
+        where user_id = #{userId}
+    </select>
+
+</mapper>
