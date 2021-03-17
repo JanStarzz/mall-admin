@@ -4,6 +4,8 @@ server:
   port: 8000
 
 eureka:
+  instance:
+    instance-id: pruduct8000
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -12,7 +14,7 @@ eureka:
 
 spring:
   application:
-    name: mall-product-8000
+    name: mall-product
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

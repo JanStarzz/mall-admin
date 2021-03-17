@@ -2,6 +2,9 @@ server:
   port: 8003
 
 eureka:
+  instance:
+    instance-id: mall-consumer-order
+
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -11,7 +14,7 @@ eureka:
 
 spring:
   application:
-    name: mall-consumer-order-8003
+    name: mall-consumer-order
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

@@ -2,6 +2,9 @@ server:
   port: 8001
 
 eureka:
+  instance:
+    instance-id: mall-cousumer-login
+
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -9,9 +12,10 @@ eureka:
       defaultZone: http://eureka7000.com:7000/eureka/,http://eureka7001.com:7001/eureka/
 
 
+
 spring:
   application:
-    name: mall-product-login-8001
+    name: mall-cousumer-login
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

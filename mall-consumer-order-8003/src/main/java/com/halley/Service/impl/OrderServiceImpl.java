@@ -4,10 +4,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.halley.Service.OrderItemService;
 import com.halley.Service.OrdersService;
+import com.halley.Service.ProductFeignClient;
+import com.halley.Service.ShoppingcartFeignClient;
 import com.halley.mapper.OrdersMapper;
 import entity.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import util.ResponseCode;
 import util.ResponseEntityUtil;
 
 import javax.annotation.Resource;
@@ -32,12 +37,14 @@ public class OrderServiceImpl extends ServiceImpl<OrdersMapper, Orders> implemen
     ObjectMapper mapper;
 
     @Resource
-    RestTemplate restTemplate;
+    ShoppingcartFeignClient shoppingcartFeignClient;
 
-    private static final String cartUrl = "http://localhost:8002/shoppingcart/deleteCartItem/";
+    @Resource
+    ProductFeignClient productFeignClient;
 
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public ResponseEntity addOrder(List<LinkedHashMap> list, String userId) {
 
 
@@ -48,23 +55,32 @@ public class OrderServiceImpl extends ServiceImpl<OrdersMapper, Orders> implemen
         order.setPhoneNum((String) list.get(0).get("phoneNum"));
         order.setDetail((String) list.get(0).get("detail"));
         order.setUserId(userId);
+        Object savepoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         if (save(order)) {
             ArrayList<OrderItem> orderItems = new ArrayList<>();
             for (LinkedHashMap map: list){
 
                 ProductForShopping p = mapper.convertValue(map, ProductForShopping.class);
                 OrderItem orderItem = new OrderItem();
+                Product product = new Product();
                 orderItem.setOrderId(order.getOrderId());
                 orderItem.setCount(p.getNum());
                 orderItem.setProductId(p.getProductId());
                 orderItems.add(orderItem);
-                restTemplate.delete(cartUrl+p.getItemId());
+                product.setProductId(p.getProductId());
+                product.setProductNum(p.getNum());
+                shoppingcartFeignClient.deleteItem(p.getItemId());
+                if (!productFeignClient.updateNum(product).getData()){
+                    TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savepoint);
+                    return ResponseEntityUtil.error(ResponseCode.DATABASE_ERROR.getCode()
+                            ,"您订单中的"+p.getProductName()+"库存不足，返回购物车");
+                }
             }
             if (orderItemService.saveBatch(orderItems)) {
 
 
 
-                return ResponseEntityUtil.success(true);
+                return ResponseEntityUtil.success(ResponseCode.SUCCESS.getCode());
             }
 
         }

@@ -29,13 +29,5 @@
         </where>
 
     </select>
-    
-    <update id="updateNumAndSale">
-        update product
-        set product_num = product_num - #{productNum} ,
-            product_sales = product_sales + #{productNum}
-        where product_id = #{productId} and product_num - #{productNum}>0;
-
-    </update>
 
 </mapper>

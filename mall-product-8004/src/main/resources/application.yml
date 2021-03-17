@@ -1,20 +1,21 @@
+# 微服务项目嘴还加上端口，微服务名称
+
 server:
-  port: 8002
+  port: 8004
 
 eureka:
-  instance:
-    instance-id: mall-consumer-shoppingcart
-
   client:
     register-with-eureka: true
     fetch-registry: true
+
     service-url:
       defaultZone: http://eureka7000.com:7000/eureka/,http://eureka7001.com:7001/eureka/
-
+  instance:
+    instance-id: product8004
 
 spring:
   application:
-    name: mall-consumer-shoppingcart
+    name: mall-product
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

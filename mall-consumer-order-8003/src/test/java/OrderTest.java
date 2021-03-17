@@ -1,8 +1,6 @@
-import com.halley.ConsumerOrderMain;
+import com.halley.ConsumerOrder8003Main;
 import com.halley.Service.OrdersService;
 import com.halley.mapper.OrdersMapper;
-import entity.OrderShow;
-import entity.Orders;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +14,7 @@ import javax.annotation.Resource;
  */
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ConsumerOrderMain.class)
+@SpringBootTest(classes = ConsumerOrder8003Main.class)
 public class OrderTest {
 
     @Resource

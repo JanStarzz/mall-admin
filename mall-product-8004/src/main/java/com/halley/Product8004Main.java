@@ -2,17 +2,16 @@ package com.halley;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
  * @author LuBaby
- * @date 2021/3/5 8:52
  */
+@EnableEurekaClient
 @SpringBootApplication
-public class ShoppingcartMain {
-
+public class Product8004Main {
     public static void main(String[] args){
-        SpringApplication.run(ShoppingcartMain.class, args);
+        SpringApplication.run(Product8004Main.class, args);
     }
-
 
 }

@@ -16,6 +16,7 @@
       <module>mall-consumer-order-8003</module>
       <module>mall-eureka-server-7000</module>
     <module>mall-eureka-server-7001</module>
+      <module>mall-product-8004</module>
   </modules>
 
   <packaging>pom</packaging>
